@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "dbt-demo"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+dbt-core = "^1.7.0"
+sqlfluff = "^2.3.5"
+sqlfluff-templater-dbt = "^2.3.5"
+pytest-sqlfluff = "^0.1.1"
+dbt-snowflake = "^1.7.0"
+pre-commit = "^3.5.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
