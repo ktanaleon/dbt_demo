@@ -1,22 +1,22 @@
-with
+WITH
 
-products as (
+PRODUCTS AS (
 
-    select * from {{ source('tech_store', 'product') }}
+    SELECT * FROM {{ source('tech_store', 'product') }}
 
 ),
 
-final as (
+FINAL AS (
 
-    select
-        id as product_id,
-        name as product_name,
-        category,
-        price,
-        currency
+    SELECT
+        ID AS PRODUCT_ID,
+        NAME AS PRODUCT_NAME,
+        CATEGORY,
+        PRICE,
+        CURRENCY
 
-    from products
+    FROM PRODUCTS
 
 )
 
-select * from final
+SELECT * FROM FINAL

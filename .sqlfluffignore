@@ -1,0 +1,8 @@
+target/
+dbt_packages/
+seeds/
+snapshots/
+models/zz_unit_test/
+tests/generic/
+macros/
+models/zzz_qa_test/

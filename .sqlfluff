@@ -1,0 +1,251 @@
+[sqlfluff]
+#----------------------------------------------------------------------------------
+# Please refer the configuration for dbt project in the below link,
+# https://docs.sqlfluff.com/en/stable/configuration.html#dbt-project-configuration
+#---------------------------------------------------------------------------------
+# verbose is an integer (0-2) indicating the level of log output
+verbose = 1
+# Turn off color formatting of output
+nocolor = False
+# Supported dialects https://docs.sqlfluff.com/en/stable/dialects.html
+# Or run 'sqlfluff dialects'
+dialect = snowflake
+# One of [dbt|raw|jinja|python|placeholder]
+templater = dbt
+# Comma separated list of rules to check, default to all
+rules = AL01, AL02, AL03, AL04, AL05, AL06, AM03, AM04, AM05, AM06, AM07, CP01, CP02, CP03, CP04, CP05, CV01, CV02, CV03, CV05, CV07, CV10, CV11, LT01, LT02, LT04, LT06, LT07, LT08, LT10, LT11, LT12, LT13, ST04, ST05, ST07, ST08
+# Comma separated list of rules to exclude, or None
+# exclude_rules = LT05
+
+
+# Below controls SQLFluff output, see max_line_length for SQL output
+output_line_length = 80
+max_line_length = 120
+# Number of passes to run before admitting defeat
+runaway_limit = 10
+# Ignore errors by category (one or more of the following, separated by commas: lexing,linting,parsing,templating)
+ignore = None
+# Ignore linting errors found within sections of code coming directly from
+# templated code (e.g. from within Jinja curly braces. Note that it does not
+# ignore errors from literal code found within template loops.
+ignore_templated_areas = True
+# can either be autodetect or a valid encoding e.g. utf-8, utf-8-sig
+encoding = autodetect
+# Ignore inline overrides (e.g. to test if still required)
+disable_noqa = False
+# Comma separated list of file extensions to lint
+# NB: This config will only apply in the root folder
+sql_file_exts = .sql,.sql.j2,.dml,.ddl
+# Allow fix to run on files, even if they contain parsing errors
+# Note altering this is NOT RECOMMENDED as can corrupt SQL
+fix_even_unparsable = False
+# Very large files can make the parser effectively hang.
+# This limit skips files over a certain character length
+# and warns the user what has happened.
+# Set this to 0 to disable.
+large_file_skip_byte_limit = 20000
+
+[sqlfluff:indentation]
+# See https://docs.sqlfluff.com/en/stable/indentation.html
+indented_joins = False
+indented_ctes = False
+indented_using_on = True
+indented_on_contents = True
+template_blocks_indent = True
+tab_space_size = 4
+indent_unit = space
+
+[sqlfluff:templater]
+unwrap_wrapped_queries = True
+
+[sqlfluff:templater:jinja]
+apply_dbt_builtins = True
+
+[sqlfluff:templater:dbt]
+project_dir = .
+profiles_dir = ../.dbt
+dialect = snowflake
+
+[sqlfluff:layout:type:comma]
+line_position = trailing
+
+# Some rules can be configured directly from the config common to other rules
+[sqlfluff:rules]
+allow_scalar = True
+single_table_references = consistent
+unquoted_identifiers_policy = all
+
+# Some rules have their own specific config
+#[sqlfluff:rules:L003]
+#hanging_indents = True
+
+#[sqlfluff:rules:L007]
+#operator_new_lines = after
+[sqlfluff:rules:layout.operators]
+operator_new_lines = after
+
+#[sqlfluff:rules:L010]
+[sqlfluff:rules:capitalisation.keywords]
+# Keywords
+capitalisation_policy = upper
+# Comma separated list of words to ignore for this rule
+ignore_words = None
+ignore_words_regex = None
+
+#[sqlfluff:rules:L011]
+[sqlfluff:rules:aliasing.table]
+# Aliasing preference for tables
+aliasing = explicit
+
+#[sqlfluff:rules:L012]
+[sqlfluff:rules:aliasing.column]
+# Aliasing preference for columns
+aliasing = explicit
+
+#[sqlfluff:rules:L013]
+[sqlfluff:rules:aliasing.expression]
+# Aliasing preference for columns
+allow_scalar = False
+
+#[sqlfluff:rules:L014]
+[sqlfluff:rules:capitalisation.identifiers]
+# Unquoted identifiers
+extended_capitalisation_policy = upper
+# Comma separated list of words to ignore for this rule
+ignore_words = None
+ignore_words_regex = None
+
+#[sqlfluff:rules:L016]
+[sqlfluff:rules:layout.long_lines]
+# Line length
+ignore_comment_lines = True
+ignore_comment_clauses = False
+
+#[sqlfluff:rules:L027]
+[sqlfluff:rules:references.qualification]
+# Comma separated list of words to ignore for this rule
+ignore_words = None
+ignore_words_regex = None
+
+#[sqlfluff:rules:L026]
+[sqlfluff:rules:references.from]
+# References must be in FROM clause
+# Disabled for some dialects (e.g. bigquery)
+force_enable = False
+
+#[sqlfluff:rules:L028]
+[sqlfluff:rules:references.consistent]
+# References must be consistently used
+# Disabled for some dialects (e.g. bigquery)
+force_enable = False
+
+#[sqlfluff:rules:L029]
+[sqlfluff:rules:references.keywords]
+# Keywords should not be used as identifiers.
+unquoted_identifiers_policy = aliases
+quoted_identifiers_policy = none
+# Comma separated list of words to ignore for this rule
+ignore_words = None
+ignore_words_regex = None
+
+#[sqlfluff:rules:L030]
+[sqlfluff:rules:capitalisation.functions]
+# Function names
+extended_capitalisation_policy = upper
+# Comma separated list of words to ignore for this rule
+ignore_words = None
+ignore_words_regex = None
+
+#[sqlfluff:rules:L031]
+[sqlfluff:rules:aliasing.forbid]
+# Avoid table aliases in from clauses and join conditions.
+# Disabled for some dialects (e.g. bigquery)
+force_enable = False
+
+#[sqlfluff:rules:L036]
+[sqlfluff:rules:layout.select_targets]
+wildcard_policy = single
+
+#[sqlfluff:rules:L038]
+[sqlfluff:rules:convention.select_trailing_comma]
+# Trailing commas
+select_clause_trailing_comma = forbid
+
+#[sqlfluff:rules:L040]
+[sqlfluff:rules:capitalisation.literals]
+# Null & Boolean Literals
+capitalisation_policy = upper
+# Comma separated list of words to ignore for this rule
+ignore_words = None
+ignore_words_regex = None
+
+#[sqlfluff:rules:L042]
+[sqlfluff:rules:structure.subquery]
+# By default, allow subqueries in from clauses, but not join clauses
+forbid_subquery_in = join
+
+#[sqlfluff:rules:L047]
+[sqlfluff:rules:convention.count_rows]
+# Consistent syntax to count all rows
+prefer_count_1 = False
+prefer_count_0 = False
+
+#[sqlfluff:rules:L051]
+[sqlfluff:rules:ambiguous.join]
+# Fully qualify JOIN clause
+fully_qualify_join_types = inner
+
+#[sqlfluff:rules:L052]
+[sqlfluff:rules:convention.terminator]
+# Semi-colon formatting approach
+multiline_newline = False
+require_final_semicolon = False
+
+#[sqlfluff:rules:L054]
+[sqlfluff:rules:ambiguous.column_references]
+# GROUP BY/ORDER BY column references
+group_by_and_order_by_style = consistent
+
+#[sqlfluff:rules:L057]
+[sqlfluff:rules:references.special_chars]
+# Special characters in identifiers
+unquoted_identifiers_policy = all
+quoted_identifiers_policy = all
+allow_space_in_identifier = False
+additional_allowed_characters = ""
+ignore_words = None
+ignore_words_regex = None
+
+#[sqlfluff:rules:L059]
+[sqlfluff:rules:references.quoting]
+# Policy on quoted and unquoted identifiers
+prefer_quoted_identifiers = False
+ignore_words = None
+ignore_words_regex = None
+force_enable = False
+
+#[sqlfluff:rules:L062]
+[sqlfluff:rules:convention.blocked_words]
+# Comma separated list of blocked words that should not be used
+blocked_words = None
+blocked_regex = None
+
+#[sqlfluff:rules:L063]
+[sqlfluff:rules:capitalisation.types]
+# Data Types
+extended_capitalisation_policy = upper
+# Comma separated list of words to ignore for this rule
+ignore_words = None
+ignore_words_regex = None
+
+#[sqlfluff:rules:L064]
+[sqlfluff:rules:convention.quoted_literals]
+# Consistent usage of preferred quotes for quoted literals
+preferred_quoted_literal_style = consistent
+# Disabled for dialects that do not support single and double quotes for quoted literals (e.g. Postgres)
+force_enable = False
+
+#[sqlfluff:rules:L066]
+[sqlfluff:rules:aliasing.length]
+min_alias_length = None
+max_alias_length = None

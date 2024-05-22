@@ -1,20 +1,20 @@
-with
+WITH
 
-states as (
+STATES AS (
 
-    select * from {{ source('tech_store', 'state') }}
+    SELECT * FROM {{ source('tech_store', 'state') }}
 
 ),
 
-final as (
+FINAL AS (
 
-    select
-        id as state_id,
-        name as state_name,
-        code as state_code
+    SELECT
+        ID AS STATE_ID,
+        NAME AS STATE_NAME,
+        CODE AS STATE_CODE
 
-    from states
+    FROM STATES
 
 )
 
-select * from final
+SELECT * FROM FINAL

@@ -1,51 +1,51 @@
-with
+WITH
 
-customers as (
+CUSTOMERS AS (
 
-    select * from {{ ref('stg_tech_store__customers') }}
-
-),
-
-cities as (
-
-    select * from {{ ref('stg_tech_store__cities') }}
+    SELECT * FROM {{ ref('stg_tech_store__customers') }}
 
 ),
 
-states as (
+CITIES AS (
 
-    select * from {{ ref('stg_tech_store__states') }}
-
-),
-
-zip_codes as (
-
-    select * from {{ ref('stg_tech_store__zip_codes') }}
+    SELECT * FROM {{ ref('stg_tech_store__cities') }}
 
 ),
 
-employees as (
+STATES AS (
 
-    select * from {{ ref('stg_tech_store__employees') }}
+    SELECT * FROM {{ ref('stg_tech_store__states') }}
 
 ),
 
-customers_and_locations_joined as (
-    select
-        customers.customer_id,
-        cities.city_name,
-        states.state_name,
-        zip_codes.zip_code
-    from customers
+ZIP_CODES AS (
 
-    left join cities
-        on customers.city_id = cities.city_id
+    SELECT * FROM {{ ref('stg_tech_store__zip_codes') }}
 
-    left join states
-        on cities.state_id = states.state_id
+),
 
-    left join zip_codes
-        on cities.zip_code_id = zip_codes.zip_code_id
+EMPLOYEES AS (
+
+    SELECT * FROM {{ ref('stg_tech_store__employees') }}
+
+),
+
+CUSTOMERS_AND_LOCATIONS_JOINED AS (
+    SELECT
+        CUSTOMERS.CUSTOMER_ID,
+        CITIES.CITY_NAME,
+        STATES.STATE_NAME,
+        ZIP_CODES.ZIP_CODE
+    FROM CUSTOMERS
+
+    LEFT JOIN CITIES
+        ON CUSTOMERS.CITY_ID = CITIES.CITY_ID
+
+    LEFT JOIN STATES
+        ON CITIES.STATE_ID = STATES.STATE_ID
+
+    LEFT JOIN ZIP_CODES
+        ON CITIES.ZIP_CODE_ID = ZIP_CODES.ZIP_CODE_ID
 )
 
-select * from customers_and_locations_joined
+SELECT * FROM CUSTOMERS_AND_LOCATIONS_JOINED

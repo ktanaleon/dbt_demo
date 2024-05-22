@@ -1,0 +1,28 @@
+repos:
+  - repo: 'https://github.com/adrienverge/yamllint.git'
+    rev: v1.33.0
+    hooks:
+      - id: yamllint
+        args:
+          - '-c=.yamllint'
+  - repo: 'https://github.com/sqlfluff/sqlfluff'
+    rev: 3.0.6
+    hooks:
+      - id: sqlfluff-lint
+        args:
+          - '--dialect'
+          - snowflake
+        additional_dependencies:
+          - dbt-core==1.7.0
+          - dbt-snowflake==1.7.0
+          - sqlfluff-templater-dbt==3.0.6
+      - id: sqlfluff-fix
+        args:
+          - '--dialect'
+          - snowflake
+        stages:
+          - manual
+        additional_dependencies:
+          - dbt-core==1.7.0
+          - dbt-snowflake==1.7.0
+          - sqlfluff-templater-dbt==3.0.6
