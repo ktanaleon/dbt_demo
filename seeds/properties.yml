@@ -1,0 +1,10 @@
+version: 2
+
+seeds:
+  - name: sale_dates
+    config:
+      schema: staging
+      column_types:
+        sale_date: date 
+        name: varchar
+        discount_percent: numeric(18,2)

@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: customers
+  - name: orders
+  - name: orders_incremental
+  - name: customers_incremental
