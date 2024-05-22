@@ -1,0 +1,61 @@
+name: Deploy to Prod (Post Merge)
+on:
+  pull_request:
+    types:
+      - closed
+  workflow_dispatch:
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+jobs:
+  build-and-deploy:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+    env:
+        PYTHON_VERSION: 3.10.12
+        POETRY_URL: https://install.python-poetry.org
+        POETRY_CACHE_DIR: ".venv"
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+        - name: Set up Python
+          uses: actions/setup-python@v4
+          with:
+            python-version: ${{ env.PYTHON_VERSION }}
+        - name: Install Poetry
+          run: |
+            python -V
+            curl -sSL ${{ env.POETRY_URL }} | python3 -
+            poetry config virtualenvs.create true
+            poetry config virtualenvs.in-project true
+            ls -a # used for logging and debugging
+        - name: Cache poetry virtualenv
+          uses: actions/cache@v3
+          id: cache
+          with:
+            path: ${{ env.POETRY_CACHE_DIR }}
+            key: ${{ runner.os }}-${{ hashFiles('poetry.lock') }}
+        - name: Install dependencies
+          if: steps.cache.outputs.cache-hit != 'true'
+          run: |
+            poetry install --no-interaction --no-root
+        - name: Check dependencies
+          run: |
+            echo "display information about the current poetry environment, (e.g. 'poetry env info') "
+            poetry env info
+            echo "list directory"
+            ls -a # used for logging and debugging, we should see here the .venv file is included in project root
+            echo "show information about all poetry packages"
+            poetry show
+        - name: Create Profile Yaml
+          env:
+            DBT_PROFILE_YAML: ${{ secrets.DBT_PROFILE_YAML }}
+          run: |
+            mkdir -p profiles
+            echo "$DBT_PROFILE_YAML" | base64 --decode > profiles/profiles.yml
+        - name: Install DBT Dependencies
+          run: |
+            poetry run dbt deps
+        - name: DBT Build
+          run: |
+            poetry run dbt build --profiles-dir profiles --target prod
