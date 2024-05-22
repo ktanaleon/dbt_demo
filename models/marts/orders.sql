@@ -1,62 +1,62 @@
-with
+WITH
 
-orders as (
+ORDERS AS (
 
-    select * from {{ ref('stg_tech_store__orders') }}
-
-),
-
-transactions as (
-
-    select * from {{ ref('stg_payment_app__transactions') }}
+    SELECT * FROM {{ ref('stg_tech_store__orders') }}
 
 ),
 
-products as (
+TRANSACTIONS AS (
 
-    select * from {{ ref('stg_tech_store__products') }}
-
-),
-
-customers as (
-
-    select * from {{ ref('stg_tech_store__customers') }}
+    SELECT * FROM {{ ref('stg_payment_app__transactions') }}
 
 ),
 
+PRODUCTS AS (
 
-final as (
+    SELECT * FROM {{ ref('stg_tech_store__products') }}
 
-    select
-        orders.order_id,
-        transactions.transaction_id,
-        customers.customer_id,
-        customers.customer_name,
-        products.product_name,
-        products.category,
-        products.price,
-        products.currency,
-        orders.quantity,        
-        transactions.cost_per_unit_in_usd,
-        transactions.amount_in_usd,
-        {{ usd_to_gbp('transactions.amount_in_usd')}} as amount_in_gbp,
-        transactions.tax_in_usd,
-        {{ usd_to_gbp('transactions.tax_in_usd')}} as tax_in_gbp,
-        transactions.total_charged_in_usd,
-        orders.created_at, 
-        {{ utc_to_est('orders.created_at') }} as created_at_est
+),
 
-    from orders
+CUSTOMERS AS (
 
-    left join transactions
-        on orders.order_id = transactions.order_id
+    SELECT * FROM {{ ref('stg_tech_store__customers') }}
 
-    left join products
-        on orders.product_id = products.product_id
+),
 
-    left join customers
-        on orders.customer_id = customers.customer_id
+
+FINAL AS (
+
+    SELECT
+        ORDERS.ORDER_ID,
+        TRANSACTIONS.TRANSACTION_ID,
+        CUSTOMERS.CUSTOMER_ID,
+        CUSTOMERS.CUSTOMER_NAME,
+        PRODUCTS.PRODUCT_NAME,
+        PRODUCTS.CATEGORY,
+        PRODUCTS.PRICE,
+        PRODUCTS.CURRENCY,
+        ORDERS.QUANTITY,
+        TRANSACTIONS.COST_PER_UNIT_IN_USD,
+        TRANSACTIONS.AMOUNT_IN_USD,
+        {{ usd_to_gbp('transactions.amount_in_usd')}} AS AMOUNT_IN_GBP,
+        TRANSACTIONS.TAX_IN_USD,
+        {{ usd_to_gbp('transactions.tax_in_usd')}} AS TAX_IN_GBP,
+        TRANSACTIONS.TOTAL_CHARGED_IN_USD,
+        ORDERS.CREATED_AT,
+        {{ utc_to_est('orders.created_at') }} AS CREATED_AT_EST
+
+    FROM ORDERS
+
+    LEFT JOIN TRANSACTIONS
+        ON ORDERS.ORDER_ID = TRANSACTIONS.ORDER_ID
+
+    LEFT JOIN PRODUCTS
+        ON ORDERS.PRODUCT_ID = PRODUCTS.PRODUCT_ID
+
+    LEFT JOIN CUSTOMERS
+        ON ORDERS.CUSTOMER_ID = CUSTOMERS.CUSTOMER_ID
 
 )
 
-select * from final
+SELECT * FROM FINAL

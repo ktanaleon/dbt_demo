@@ -1,31 +1,31 @@
-with
+WITH
 
-customers as (
+CUSTOMERS AS (
 
-    select * from {{ ref('stg_tech_store__customers') }}
-
-),
-
-orders as (
-
-    select * from {{ ref('orders') }}
+    SELECT * FROM {{ ref('stg_tech_store__customers') }}
 
 ),
 
-total_revenue_and_units_by_customer as (
+ORDERS AS (
 
-    select 
-        customers.customer_id,
-        sum(orders.amount_in_usd) as total_revenue_in_usd,
-        sum(orders.quantity) as total_quantity
-    
-    from orders
+    SELECT * FROM {{ ref('orders') }}
 
-    left join customers
-        on orders.customer_id = customers.customer_id
+),
 
-    group by 1
+TOTAL_REVENUE_AND_UNITS_BY_CUSTOMER AS (
+
+    SELECT
+        CUSTOMERS.CUSTOMER_ID,
+        SUM(ORDERS.AMOUNT_IN_USD) AS TOTAL_REVENUE_IN_USD,
+        SUM(ORDERS.QUANTITY) AS TOTAL_QUANTITY
+
+    FROM ORDERS
+
+    LEFT JOIN CUSTOMERS
+        ON ORDERS.CUSTOMER_ID = CUSTOMERS.CUSTOMER_ID
+
+    GROUP BY 1
 
 )
 
-select * from total_revenue_and_units_by_customer
+SELECT * FROM TOTAL_REVENUE_AND_UNITS_BY_CUSTOMER

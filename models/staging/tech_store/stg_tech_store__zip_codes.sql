@@ -1,19 +1,19 @@
-with
+WITH
 
-zip_codes as (
+ZIP_CODES AS (
 
-    select * from {{ source('tech_store', 'zip') }}
+    SELECT * FROM {{ source('tech_store', 'zip') }}
 
 ),
 
-final as (
+FINAL AS (
 
-    select
-        id as zip_code_id,
-        code as zip_code
+    SELECT
+        ID AS ZIP_CODE_ID,
+        CODE AS ZIP_CODE
 
-    from zip_codes
+    FROM ZIP_CODES
 
 )
 
-select * from final
+SELECT * FROM FINAL

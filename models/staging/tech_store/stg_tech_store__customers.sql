@@ -1,24 +1,24 @@
-with
+WITH
 
-customers as (
+CUSTOMERS AS (
 
-    select * from {{ source('tech_store', 'customer') }}
+    SELECT * FROM {{ source('tech_store', 'customer') }}
 
 ),
 
-final as (
+FINAL AS (
 
-    select
-        id as customer_id,
-        name as customer_name,
-        cityid as city_id,
-        mainsalesrepid as main_employee_id,
-        createdatetime as created_at,
-        updatedatetime as updated_at,
-        active as is_active
-    
-    from customers
+    SELECT
+        ID AS CUSTOMER_ID,
+        NAME AS CUSTOMER_NAME,
+        CITYID AS CITY_ID,
+        MAINSALESREPID AS MAIN_EMPLOYEE_ID,
+        CREATEDATETIME AS CREATED_AT,
+        UPDATEDATETIME AS UPDATED_AT,
+        ACTIVE AS IS_ACTIVE
+
+    FROM CUSTOMERS
 
 )
 
-select * from final
+SELECT * FROM FINAL

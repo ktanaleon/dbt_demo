@@ -1,26 +1,26 @@
-with 
+WITH
 
-transactions as (
+TRANSACTIONS AS (
 
-    select * from {{ source('payment_app', 'transactions') }}
+    SELECT * FROM {{ source('payment_app', 'transactions') }}
 
 ),
 
-final as (
+FINAL AS (
 
-    select 
-        id as transaction_id,
-        payload,
-        payload:amount::numeric(18,2) as amount_in_usd,
-        payload:cost_per::numeric(18,2) as cost_per_unit_in_usd,
-        payload:order_id::integer as order_id,
-        payload:product_id::integer as product_id,
-        payload:quantity::integer as quantity,
-        payload:tax::numeric(18,2) as tax_in_usd,
-        payload:total_charged::numeric(18,2) as total_charged_in_usd,
-        date as created_at
-    from transactions
-    
+    SELECT
+        ID AS TRANSACTION_ID,
+        PAYLOAD,
+        PAYLOAD:amount::NUMERIC(18, 2) AS AMOUNT_IN_USD,
+        PAYLOAD:cost_per::NUMERIC(18, 2) AS COST_PER_UNIT_IN_USD,
+        PAYLOAD:order_id::INTEGER AS ORDER_ID,
+        PAYLOAD:product_id::INTEGER AS PRODUCT_ID,
+        PAYLOAD:quantity::INTEGER AS QUANTITY,
+        PAYLOAD:tax::NUMERIC(18, 2) AS TAX_IN_USD,
+        PAYLOAD:total_charged::NUMERIC(18, 2) AS TOTAL_CHARGED_IN_USD,
+        DATE AS CREATED_AT
+    FROM TRANSACTIONS
+
 )
 
-select * from final
+SELECT * FROM FINAL
